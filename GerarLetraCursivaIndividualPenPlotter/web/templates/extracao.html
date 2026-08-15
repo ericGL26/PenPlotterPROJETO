@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Banco de caligrafias — Extração</title>
+</head>
+<body
+  data-nome="{{ nome }}"
+  data-indice-imagem="{{ indice_imagem }}"
+  data-imagem-url="{{ url_for('extracao.imagem', nome=nome, indice=indice_imagem) }}"
+  data-confirmar-url="{{ url_for('extracao.confirmar', nome=nome) }}"
+  data-regioes='{{ regioes | tojson }}'
+  data-letras-suportadas='{{ letras_suportadas | tojson }}'
+>
+  <h1>Extrair letras — {{ nome }}</h1>
+
+  {% if sem_sugestoes %}
+    <p class="aviso" role="alert">
+      Nenhuma região foi encontrada automaticamente nesta imagem. Desenhe
+      manualmente um retângulo ao redor de uma letra.
+    </p>
+  {% endif %}
+
+  <canvas id="canvas-extracao"></canvas>
+
+  <p>Letras suportadas: {{ letras_suportadas | join(', ') }}</p>
+
+  <ul id="lista-pendencias"></ul>
+
+  <script src="{{ url_for('extracao.static', filename='extracao.js') }}"></script>
+</body>
+</html>

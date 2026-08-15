@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Banco de caligrafias — Consulta</title>
+</head>
+<body>
+  {% if caligrafia %}
+    <h1>Caligrafia — {{ caligrafia.nome }}</h1>
+    <p><a href="{{ url_for('consulta.lista') }}">&larr; Voltar para a lista</a></p>
+
+    <ul id="cobertura-letras">
+      {% for letra in letras_suportadas %}
+        {% set quantidade = cobertura.get(letra, 0) %}
+        {% if letra in letras_faltando %}
+          <li class="letra-faltando" data-letra="{{ letra }}">
+            {{ letra }}: faltando
+          </li>
+        {% else %}
+          <li class="letra-com-variante" data-letra="{{ letra }}">
+            {{ letra }}: {{ quantidade }} variante(s)
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    <h2>Variantes salvas</h2>
+    {% for letra, variantes in caligrafia.variantes.items() %}
+      {% if variantes %}
+        <h3>{{ letra }}</h3>
+        <ul>
+          {% for variante in variantes %}
+            <li data-variante-id="{{ variante.id }}">
+              {{ variante.id }}
+              <form
+                method="post"
+                action="{{ url_for('consulta.excluir', nome=caligrafia.nome, letra=letra, variante_id=variante.id) }}"
+              >
+                <button type="submit">Excluir</button>
+              </form>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    <h1>Caligrafias salvas</h1>
+
+    {% if not caligrafias %}
+      <p>Nenhuma caligrafia salva ainda.</p>
+    {% endif %}
+
+    <ul id="lista-caligrafias">
+      {% for c in caligrafias %}
+        {% set c_cobertura = c.cobertura() %}
+        <li data-nome="{{ c.nome }}">
+          <a href="{{ url_for('consulta.detalhes', nome=c.nome) }}">{{ c.nome }}</a>
+          <ul>
+            {% for letra in letras_suportadas %}
+              <li>{{ letra }}: {{ c_cobertura.get(letra, 0) }}</li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>

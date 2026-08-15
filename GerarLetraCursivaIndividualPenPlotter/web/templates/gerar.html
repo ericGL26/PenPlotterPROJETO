@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <title>Gerar texto na caligrafia</title>
+</head>
+<body>
+  <h1>Escrever um texto na sua caligrafia</h1>
+
+  {% if erro %}
+    <p class="erro" role="alert">{{ erro }}</p>
+  {% endif %}
+
+  <form method="post" action="{{ url_for('gerar.enviar') }}">
+    <label for="caligrafia">Caligrafia</label>
+    <select id="caligrafia" name="caligrafia" required>
+      {% for caligrafia in caligrafias %}
+        <option value="{{ caligrafia.nome }}">{{ caligrafia.nome }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="texto">Texto</label>
+    <textarea id="texto" name="texto" required></textarea>
+
+    <button type="submit">Gerar</button>
+  </form>
+
+  {% if imagem_gerada %}
+    <section>
+      {% if aviso_truncamento %}
+        <p class="aviso" role="alert">
+          O texto não coube inteiro numa página — a partir de
+          "{{ aviso_truncamento.split(' ')[0] }}" ficou de fora.
+        </p>
+      {% endif %}
+      <img src="{{ url_for('gerar.baixar', nome_arquivo=imagem_gerada) }}" alt="Texto gerado na caligrafia escolhida">
+      <p>
+        <a href="{{ url_for('gerar.baixar', nome_arquivo=imagem_gerada) }}">Baixar imagem (PNG)</a>
+      </p>
+    </section>
+  {% endif %}
+</body>
+</html>

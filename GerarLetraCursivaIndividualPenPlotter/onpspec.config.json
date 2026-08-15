@@ -1,0 +1,15 @@
+{
+  "testCommand": "\"C:\\Users\\Eduardo\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe\" -m pytest --tap-stream",
+  "reporter": "tap",
+  "testGlobs": [
+    "tests/**",
+    "test_*.py",
+    "*_test.py"
+  ],
+  "srcGlobs": [
+    "caligrafias/**/*.py",
+    "geracao/**/*.py",
+    "web/**/*.py",
+    "*.py"
+  ]
+}
